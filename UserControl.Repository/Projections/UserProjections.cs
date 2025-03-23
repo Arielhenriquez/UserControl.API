@@ -10,6 +10,7 @@ public static class UserProjections
 {
     public static Expression<Func<UserEntity, UserResponseDto>> UserToUserResponseDto = user => new UserResponseDto
     {
+        Id = user.Id,
         Name = user.Name,
         Email = user.Email,
         LastLogin = user.LastLogin,

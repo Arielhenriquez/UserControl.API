@@ -1,7 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using UserControl.Core.Abstractions.Repositories;
 using UserControl.Core.Abstractions.Services;
@@ -11,37 +13,35 @@ using UserControl.Model.Entities;
 using UserControl.Repository.Projections;
 
 namespace UserControl.Services;
-//Todo: Validar Clave
-//Validar formato de correo
-//Validar correo ya existe
+
+
 //Agregar logica de isActive
 public class UserService : IUserService
 {
     private readonly IBaseRepository<UserEntity> _userRepository;
     private readonly IBaseRepository<PhoneEntity> _phoneRepository;
+    private readonly IConfiguration _configuration;
 
-    public UserService(IBaseRepository<UserEntity> userRepository, IBaseRepository<PhoneEntity> phoneRepository)
+    public UserService(IBaseRepository<UserEntity> userRepository, IBaseRepository<PhoneEntity> phoneRepository, IConfiguration configuration)
     {
         _userRepository = userRepository;
         _phoneRepository = phoneRepository;
+        _configuration = configuration;
     }
 
     public async Task<IEnumerable<UserResponseDto>> GetAllUsers()
     {
-        var userDtos = await _userRepository.Query() 
-            .Select(UserProjections.UserToUserResponseDto)
-            .ToListAsync(); 
-
-        return userDtos;  
-    }
-
-    public async Task<UserResponseDto> GetUserById(Guid id, CancellationToken cancellationToken) 
-    {
         var userDtos = await _userRepository.Query()
             .Select(UserProjections.UserToUserResponseDto)
-            .FirstOrDefaultAsync(cancellationToken);
+            .ToListAsync();
 
         return userDtos;
+    }
+
+    public async Task<UserResponseDto> GetUserById(Guid id, CancellationToken cancellationToken)
+    {
+        var userEntity = await _userRepository.GetById(id, cancellationToken);
+        return UserProjections.UserToUserResponseDto.Compile().Invoke(userEntity);
     }
 
 
@@ -57,6 +57,12 @@ public class UserService : IUserService
             IsActive = true,
         };
 
+
+        if (await EmailExists(createUserDto.Email))
+        {
+            throw new BadRequestException("El correo ya esta registrado");
+        }
+
         await _userRepository.AddAsync(userEntity, cancellationToken);
 
         foreach (var phoneDto in createUserDto.Phones)
@@ -67,18 +73,18 @@ public class UserService : IUserService
                 PhoneNumber = phoneDto.Number,
                 CityCode = phoneDto.CityCode,
                 CountryCode = phoneDto.CountryCode,
-                UserId = userEntity.Id, 
+                UserId = userEntity.Id,
             };
 
-            await _phoneRepository.AddAsync(phoneEntity, cancellationToken);  
+            await _phoneRepository.AddAsync(phoneEntity, cancellationToken);
         }
 
         var userResponseDto = await _userRepository.Query()
             .Where(u => u.Id == userEntity.Id)
             .Select(UserProjections.UserToUserResponseDto)
-            .FirstOrDefaultAsync(); 
+            .FirstOrDefaultAsync();
 
-        return userResponseDto;  
+        return userResponseDto;
     }
 
     public async Task<string> LoginUser(UserLoginDto loginDto, CancellationToken cancellationToken)
@@ -88,13 +94,13 @@ public class UserService : IUserService
 
         if (user == null || !user.IsActive)
         {
-            throw new NotFoundException("User not found or inactive.");
+            throw new NotFoundException("Userio no encontrado or inactivo.");
         }
 
-        bool isPasswordValid = ValidatePassword(loginDto.Password, user.Password); 
+        bool isPasswordValid = ValidatePassword(loginDto.Password, user.Password);
         if (!isPasswordValid)
         {
-            throw new UnauthorizedAccessException("Invalid credentials");
+            throw new UnauthorizedAccessException("Credenciales invalidas");
         }
 
         await UpdateLastLogin(user);
@@ -104,9 +110,17 @@ public class UserService : IUserService
         return jwtToken;
     }
 
+    //public async ActivateUser()
+
     private bool ValidatePassword(string inputPassword, string storedPassword)
     {
         return inputPassword == storedPassword;
+    }
+
+    private async Task<bool> EmailExists(string email)
+    {
+        var user = await _userRepository.Query().AnyAsync(x => x.Email == email);
+        return user;
     }
 
     private async Task UpdateLastLogin(UserEntity user)
@@ -117,18 +131,26 @@ public class UserService : IUserService
 
     private string GenerateJwtToken(UserEntity user)
     {
+        string jwtSecretKey = _configuration["Jwt:Key"]!;
+        string issuer = _configuration["Jwt:Issuer"] ?? "UserContactApi";
+        string audience = _configuration["Jwt:Audience"] ?? "UserContactAudience";
+
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim("Id", user.Id.ToString())
+            new Claim("Id", user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Iss, issuer)
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_secret_key_here")); 
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
             claims: claims,
+            issuer: issuer,
+            audience: audience,
             expires: DateTime.Now.AddDays(1),
             signingCredentials: creds);
 
@@ -142,8 +164,8 @@ public class UserService : IUserService
         var userToUpdate = await _userRepository.GetById(id, cancellationToken);
 
         if (userToUpdate == null)
-            throw new NotFoundException("Usuario no encontrado"); 
-       
+            throw new NotFoundException("Usuario no encontrado");
+
         userToUpdate.Name = updateUserDto.Name;
         userToUpdate.Email = updateUserDto.Email;
         userToUpdate.Password = updateUserDto.Password;
@@ -152,7 +174,7 @@ public class UserService : IUserService
 
         var userResponseDto = await _userRepository.Query()
             .Where(u => u.Id == userToUpdate.Id)
-            .Select(UserProjections.UserToUserResponseDto)  
+            .Select(UserProjections.UserToUserResponseDto)
             .FirstOrDefaultAsync(cancellationToken);
 
         return userResponseDto;
