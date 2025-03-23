@@ -30,7 +30,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity>
     {
         var entity = await Query().Where(x => x.Id.Equals(id)).FirstOrDefaultAsync(cancellationToken);
 
-        if (entity is null) throw new NotFoundException(typeof(TEntity).Name, id);
+        if (entity is null) throw new NotFoundException($"No se encontro un recurso con id: {id}");
 
         return entity;
     }

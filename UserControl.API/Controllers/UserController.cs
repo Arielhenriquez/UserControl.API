@@ -7,7 +7,7 @@ using UserControl.Core.Exceptions;
 
 namespace UserControl.Api.Controllers
 {
-  
+
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -20,7 +20,7 @@ namespace UserControl.Api.Controllers
         }
 
         [HttpPost("register")]
-            [SwaggerOperation(Summary = "Registra un nuevo usuario junto con sus teléfonos.")]
+        [SwaggerOperation(Summary = "Registra un nuevo usuario junto con sus teléfonos.")]
         public async Task<ActionResult<UserResponseDto>> RegisterUser([FromBody] CreateUserDto createUserDto, CancellationToken cancellationToken)
         {
             try
@@ -28,17 +28,13 @@ namespace UserControl.Api.Controllers
                 var userResponseDto = await _userService.RegisterUser(createUserDto, cancellationToken);
                 return CreatedAtAction(nameof(GetUserById), new { id = userResponseDto.Id }, userResponseDto);
             }
-            catch (Exception ex)
+            catch (BadRequestException ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
         }
 
-        /// <summary>
-        /// Inicia sesión con las credenciales del usuario y devuelve un JWT.
-        /// </summary>
-        /// <param name="loginDto">Datos de inicio de sesión.</param>
-        /// <returns>Token JWT para el usuario.</returns>
+
         [HttpPost("login")]
         [SwaggerOperation(Summary = "Inicia sesión con las credenciales del usuario y devuelve un JWT.")]
         public async Task<ActionResult<string>> LoginUser([FromBody] UserLoginDto loginDto, CancellationToken cancellationToken)
@@ -54,12 +50,25 @@ namespace UserControl.Api.Controllers
             }
         }
 
-        /// <summary>
-        /// Actualiza los datos de un usuario.
-        /// </summary>
-        /// <param name="id">ID del usuario a actualizar.</param>
-        /// <param name="updateUserDto">Datos actualizados del usuario.</param>
-        /// <returns>Usuario actualizado con éxito.</returns>
+        [HttpPost("{userId}/active")]
+        [SwaggerOperation(Summary = "Cambia el estatus de un usuario")]
+        public async Task<ActionResult<string>> LoginUser([FromRoute] Guid userId, bool isActive, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var jwtToken = await _userService.SetUserActiveStatus(userId, isActive, cancellationToken);
+                return Ok(new { token = jwtToken });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+        }
+
         [Authorize]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Actualiza los datos de un usuario.")]
@@ -74,17 +83,12 @@ namespace UserControl.Api.Controllers
             {
                 return NotFound(new { message = "Usuario no encontrado" });
             }
-            catch (Exception ex)
+            catch (BadRequestException ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
         }
 
-        /// <summary>
-        /// Elimina un usuario por su ID.
-        /// </summary>
-        /// <param name="id">ID del usuario a eliminar.</param>
-        /// <returns>Resultado de la eliminación.</returns>
         [Authorize]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Elimina un usuario por su ID.")]
@@ -105,11 +109,6 @@ namespace UserControl.Api.Controllers
             }
         }
 
-        /// <summary>
-        /// Obtiene los detalles de un usuario por su ID.
-        /// </summary>
-        /// <param name="id">ID del usuario a obtener.</param>
-        /// <returns>Detalles del usuario solicitado.</returns>
         [Authorize]
         [HttpGet]
         [SwaggerOperation(Summary = "Obtiene todos los usuarios")]
@@ -126,11 +125,6 @@ namespace UserControl.Api.Controllers
             }
         }
 
-        /// <summary>
-        /// Obtiene los detalles de un usuario por su ID.
-        /// </summary>
-        /// <param name="id">ID del usuario a obtener.</param>
-        /// <returns>Detalles del usuario solicitado.</returns>
         [Authorize]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtiene los detalles de un usuario por su ID.")]

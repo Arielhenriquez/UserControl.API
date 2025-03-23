@@ -7,11 +7,6 @@ public class NotFoundException : Exception
     {
 
     }
-    public NotFoundException(string entityName, Guid id)
-      : base($"{entityName} con id: {id} not encontrado")
-    {
-        
-    }
 
     public int StatusCode { get; set; } = 404;
 }

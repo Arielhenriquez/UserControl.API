@@ -13,8 +13,6 @@ using UserControl.Repository.Projections;
 
 namespace UserControl.Services;
 
-
-//Agregar logica de isActive
 public class UserService : IUserService
 {
     private readonly IBaseRepository<UserEntity> _userRepository;
@@ -58,9 +56,8 @@ public class UserService : IUserService
 
 
         if (await EmailExists(createUserDto.Email))
-        {
             throw new BadRequestException("El correo ya esta registrado");
-        }
+
 
         await _userRepository.AddAsync(userEntity, cancellationToken);
 
@@ -92,9 +89,8 @@ public class UserService : IUserService
             .FirstOrDefaultAsync(u => u.Email == loginDto.Email, cancellationToken);
 
         if (user == null || !user.IsActive)
-        {
-            throw new NotFoundException("Userio no encontrado or inactivo.");
-        }
+            throw new NotFoundException("Usuario no encontrado o inactivo.");
+
 
         bool isPasswordValid = ValidatePassword(loginDto.Password, user.Password);
         if (!isPasswordValid)
@@ -109,7 +105,19 @@ public class UserService : IUserService
         return jwtToken;
     }
 
-    //public async ActivateUser()
+    public async Task<ActiveUserDto> SetUserActiveStatus(Guid userId, bool isActive, CancellationToken cancellationToken)
+    {
+        var user = await _userRepository.GetById(userId, cancellationToken);
+
+        if (user == null)
+            throw new NotFoundException("Usuario no encontrado");
+
+        user.IsActive = isActive;
+        await _userRepository.UpdateAsync(user, cancellationToken);
+
+        return new ActiveUserDto() { IsActive = isActive, UserId = userId };
+    }
+
 
     private bool ValidatePassword(string inputPassword, string storedPassword)
     {
