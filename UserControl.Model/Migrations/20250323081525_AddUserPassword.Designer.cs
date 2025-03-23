@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UserControl.Model.Context;
@@ -11,9 +12,11 @@ using UserControl.Model.Context;
 namespace UserControl.Model.Migrations
 {
     [DbContext(typeof(UserContactDbContext))]
-    partial class UserContactDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250323081525_AddUserPassword")]
+    partial class AddUserPassword
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

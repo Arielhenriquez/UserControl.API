@@ -10,21 +10,25 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
     {
         builder.Property(u => u.Name)
             .IsRequired()
-            .HasMaxLength(30); 
+            .HasMaxLength(30);
+
+        builder.Property(u => u.Password)
+           .IsRequired()
+           .HasMaxLength(30);
 
         builder.Property(u => u.Email)
             .IsRequired()
-            .HasMaxLength(40); 
+            .HasMaxLength(40);
 
         builder.Property(u => u.LastLogin)
-            .HasColumnType("timestamptz");  
+            .HasColumnType("timestamptz");
 
         builder.Property(u => u.IsActive)
-            .IsRequired(); 
+            .IsRequired();
 
         builder.HasMany(u => u.Phones)
             .WithOne(p => p.UserEntity)
             .HasForeignKey(p => p.UserId)
-            .OnDelete(DeleteBehavior.Cascade);  
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using UserControl.Core.Abstractions;
 using UserControl.Model.Configurations;
 using UserControl.Model.Entities;
 

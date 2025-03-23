@@ -1,6 +1,8 @@
-﻿namespace UserControl.Core.Abstractions;
+﻿using UserControl.Model.Entities;
 
-public interface IBaseEntity
+namespace UserControl.Core;
+
+public class BaseEntity : IBaseEntity
 {
     public Guid Id { get; set; }
     public DateTimeOffset Created { get; set; }

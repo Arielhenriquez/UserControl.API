@@ -15,8 +15,4 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\UserControl.Core\UserControl.Core.csproj" />
-  </ItemGroup>
-
 </Project>
