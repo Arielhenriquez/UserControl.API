@@ -1,0 +1,37 @@
+-- public."Users" definition
+
+-- Drop table
+
+-- DROP TABLE public."Users";
+
+CREATE TABLE public."Users" (
+	"Id" uuid NOT NULL,
+	"Name" varchar(30) NOT NULL,
+	"Email" varchar(40) NOT NULL,
+	"LastLogin" timestamptz NOT NULL,
+	"IsActive" bool NOT NULL,
+	"Created" timestamptz NOT NULL,
+	"Modified" timestamptz NULL,
+	"Password" varchar(30) DEFAULT ''::character varying NOT NULL,
+	CONSTRAINT "PK_Users" PRIMARY KEY ("Id")
+);
+
+
+-- public."Phones" definition
+
+-- Drop table
+
+-- DROP TABLE public."Phones";
+
+CREATE TABLE public."Phones" (
+	"Id" uuid NOT NULL,
+	"PhoneNumber" varchar(12) NOT NULL,
+	"CityCode" varchar(5) NOT NULL,
+	"CountryCode" varchar(3) NOT NULL,
+	"UserId" uuid NOT NULL,
+	"Created" timestamptz NOT NULL,
+	"Modified" timestamptz NULL,
+	CONSTRAINT "PK_Phones" PRIMARY KEY ("Id"),
+	CONSTRAINT "FK_Phones_Users_UserId" FOREIGN KEY ("UserId") REFERENCES public."Users"("Id") ON DELETE CASCADE
+);
+CREATE INDEX "IX_Phones_UserId" ON public."Phones" USING btree ("UserId");

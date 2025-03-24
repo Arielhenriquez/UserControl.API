@@ -1,0 +1,89 @@
+-- =========================
+-- USUARIOS
+-- =========================
+
+-- Usuario 1
+INSERT INTO public."Users"
+("Id", "Name", "Email", "LastLogin", "IsActive", "Created", "Modified", "Password")
+VALUES(
+  '7efd2b37-9650-4c49-b0ce-4dc4a7f02110',  -- ID (UUID)
+  'John Doe',                             -- Nombre (max 30)
+  'john@example.com',                     -- Email (max 40)
+  NOW(),                                  -- LastLogin (fecha/hora actual)
+  true,                                   -- IsActive
+  NOW(),                                  -- Created
+  NOW(),                                  -- Modified
+  'Pass123'                               -- Password (max 30)
+);
+
+-- Usuario 2
+INSERT INTO public."Users"
+("Id", "Name", "Email", "LastLogin", "IsActive", "Created", "Modified", "Password")
+VALUES(
+  '984d2cff-2a10-473f-9903-3be5f0b6f046',
+  'Jane Smith',
+  'jane@example.com',
+  NOW() + INTERVAL '1 day',               -- LastLogin en 1 día
+  true,
+  NOW() + INTERVAL '1 day',               -- Created en 1 día
+  NULL,                                   -- Modified
+  'Secret@1'
+);
+
+-- Usuario 3
+INSERT INTO public."Users"
+("Id", "Name", "Email", "LastLogin", "IsActive", "Created", "Modified", "Password")
+VALUES(
+  'fe19c776-3bb9-4f4c-92ac-522a1f86df7d',
+  'Alice Brown',
+  'alice@example.com',
+  NOW() + INTERVAL '2 day',               -- LastLogin en 2 días
+  false,
+  NOW() + INTERVAL '2 day',               -- Created en 2 días
+  NOW() + INTERVAL '2 day',               -- Modified en 2 días
+  'Password#9'
+);
+
+
+-- =========================
+-- TELÉFONOS
+-- =========================
+
+-- Teléfono 1 (asociado a Usuario 1)
+INSERT INTO public."Phones"
+("Id", "PhoneNumber", "CityCode", "CountryCode", "UserId", "Created", "Modified")
+VALUES(
+  'd3b8f18e-24f2-4fce-8262-ffa634f45b64',  -- ID (UUID)
+  '5551234567',                           -- PhoneNumber (max 12)
+  '305',                                  -- CityCode (max 5)
+  '1',                                    -- CountryCode (max 3)
+  '7efd2b37-9650-4c49-b0ce-4dc4a7f02110',  -- UserId (Usuario 1)
+  NOW(),                                  -- Created
+  NULL                                    -- Modified
+);
+
+-- Teléfono 2 (asociado a Usuario 2)
+INSERT INTO public."Phones"
+("Id", "PhoneNumber", "CityCode", "CountryCode", "UserId", "Created", "Modified")
+VALUES(
+  '9d498a06-28de-4ef4-bc14-8f804c16c45a',
+  '5557654321',
+  '212',
+  '1',
+  '984d2cff-2a10-473f-9903-3be5f0b6f046',  -- Usuario 2
+  NOW() + INTERVAL '1 day',
+  NOW() + INTERVAL '1 day'
+);
+
+-- Teléfono 3 (asociado a Usuario 3)
+INSERT INTO public."Phones"
+("Id", "PhoneNumber", "CityCode", "CountryCode", "UserId", "Created", "Modified")
+VALUES(
+  'a24be6b2-6f4e-420d-8d6e-f4c7ccde0c82',
+  '9876543210',
+  '113',
+  '58',
+  'fe19c776-3bb9-4f4c-92ac-522a1f86df7d',  -- Usuario 3
+  NOW() + INTERVAL '2 day',
+  NULL
+);
