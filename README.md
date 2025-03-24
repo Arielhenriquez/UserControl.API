@@ -15,13 +15,54 @@ Este proyecto es un servicio **RESTful** basado en **.NET 8** que permite la ges
 
 ## Tabla de Contenidos
 1. [Estructura del Proyecto](#estructura-del-proyecto)
-2. [Instalación y Configuración](#instalación-y-configuración)
-3. [Endpoints REST API](#endpoints-rest-api)
-4. [Pruebas Unitarias](#pruebas-unitarias)
-
+2. [Diagramas del proyecto](#diagramas-del-proyecto)
+3. [Instalación y Configuración](#instalación-y-configuración)
+4. [Endpoints REST API](#endpoints-rest-api)
+5. [Pruebas Unitarias](#pruebas-unitarias)
 
 
 ---
+
+
+
+## Tabla de Contenidos
+1. [Estructura del Proyecto](#estructura)
+2. [Diagramas del proyecto](#diagramas)
+3. [Instalación y Configuración](#instalacion)
+4. [Endpoints REST API](#endpoints)
+5. [Pruebas Unitarias](#pruebas)
+
+---
+
+
+## Estructura del Proyecto <a name="estructura"></a>
+
+Aquí va tu contenido...
+
+---
+
+## Diagramas del proyecto <a name="diagramas"></a>
+
+Aquí va tu contenido...
+
+---
+
+## 🔧 Instalación y Configuración <a name="instalacion"></a>
+
+Información de configuración, Docker, .NET, etc.
+
+---
+
+## 📡 Endpoints REST API <a name="endpoints"></a>
+
+Tabla de endpoints...
+
+---
+
+## ✅ Pruebas Unitarias <a name="pruebas"></a>
+
+Cómo ejecutarlas, etc.
+
 
 ## Estructura del Proyecto
 ```
@@ -56,16 +97,24 @@ Este proyecto es un servicio **RESTful** basado en **.NET 8** que permite la ges
 ├── 📂 UserControl.Tests # Tests unitarios
 │   ├── 📂 UserUnitTest  # Pruebas unitarias del registro de usuarios
 │   └── 📂 Mocks         # Clases e interfaces simuladas para pruebas
-│
+│  📂 docs              # Diagramas del proyecto y scripts de SQL para la creacion e insercion de datos en la BD
 └── 🗎 README.md         # Documentación general
 ```
 
 ---
 
+## Diagramas del proyecto
+
+### Diagrama Entidad Relacion
+![Diagrama de Base de Datos](docs/Diagrams/DiagramaEntidadRelacion.png)
+
+### Diagrama de Solucion
+![Diagrama de Solucion](docs/Diagrams/DiagramaSolucion.png)
 
 ---
 
-## 🔧 **Instalación y Configuración**
+
+## Instalación y Configuración
 
 ### **1️⃣ Prerrequisitos**
 Asegúrate de tener instalados:
@@ -156,7 +205,7 @@ Crea un archivo appsettings.json o usa User Secrets de .NET para configurar la b
 Desde Visual studio presionar F5 para correr el proyecto o ubicarse en el boton verde arriba para ejecutar el proyecto. 
 Este abre en el navegador a esta URL: https://localhost:7059/swagger/index.html
 
-## 📡 Endpoints REST API
+## Endpoints REST API 
 
 | Método   | Endpoint                         | Descripción                                               |
 |----------|----------------------------------|-----------------------------------------------------------|
@@ -170,7 +219,7 @@ Este abre en el navegador a esta URL: https://localhost:7059/swagger/index.html
 
 
 
-## ✅ **Pruebas unitarias**
+## Pruebas unitarias 
 En visual studio ubicarse en la parte superior izquierda y darle al menu despleglable View y luego a test explorer.
 Ya en ese apartado puede ejecutar uno o ambos unit test
 
