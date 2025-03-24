@@ -15,9 +15,10 @@ Este proyecto es un servicio **RESTful** basado en **.NET 8** que permite la ges
 
 ## Tabla de Contenidos
 1. [Estructura del Proyecto](#estructura-del-proyecto)
-2. [Instalación y Configuración](#instalación-y-configuración)
-3. [Endpoints REST API](#endpoints-rest-api)
-4. [Pruebas Unitarias](#pruebas-unitarias)
+2. [Diagramas del proyecto](#diagramas)
+3. [Instalación y Configuración](#instalación-y-configuración)
+4. [Endpoints REST API](#endpoints-rest-api)
+5. [Pruebas Unitarias](#pruebas-unitarias)
 
 
 
