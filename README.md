@@ -12,19 +12,6 @@ Este proyecto es un servicio **RESTful** basado en **.NET 8** que permite la ges
 - 🌍 **EndPoints para gestión de usuarios y autenticación**.
 
 
-
-## Tabla de Contenidos
-1. [Estructura del Proyecto](#estructura-del-proyecto)
-2. [Diagramas del proyecto](#diagramas-del-proyecto)
-3. [Instalación y Configuración](#instalación-y-configuración)
-4. [Endpoints REST API](#endpoints-rest-api)
-5. [Pruebas Unitarias](#pruebas-unitarias)
-
-
----
-
-
-
 ## Tabla de Contenidos
 1. [Estructura del Proyecto](#estructura)
 2. [Diagramas del proyecto](#diagramas)
@@ -34,37 +21,8 @@ Este proyecto es un servicio **RESTful** basado en **.NET 8** que permite la ges
 
 ---
 
-
 ## Estructura del Proyecto <a name="estructura"></a>
 
-Aquí va tu contenido...
-
----
-
-## Diagramas del proyecto <a name="diagramas"></a>
-
-Aquí va tu contenido...
-
----
-
-## 🔧 Instalación y Configuración <a name="instalacion"></a>
-
-Información de configuración, Docker, .NET, etc.
-
----
-
-## 📡 Endpoints REST API <a name="endpoints"></a>
-
-Tabla de endpoints...
-
----
-
-## ✅ Pruebas Unitarias <a name="pruebas"></a>
-
-Cómo ejecutarlas, etc.
-
-
-## Estructura del Proyecto
 ```
 
 📆 UserControl
@@ -103,7 +61,7 @@ Cómo ejecutarlas, etc.
 
 ---
 
-## Diagramas del proyecto
+## Diagramas del proyecto <a name="diagramas"></a>
 
 ### Diagrama Entidad Relacion
 ![Diagrama de Base de Datos](docs/Diagrams/DiagramaEntidadRelacion.png)
@@ -114,7 +72,7 @@ Cómo ejecutarlas, etc.
 ---
 
 
-## Instalación y Configuración
+## 🔧 Instalación y Configuración <a name="instalacion"></a>
 
 ### **1️⃣ Prerrequisitos**
 Asegúrate de tener instalados:
@@ -205,7 +163,7 @@ Crea un archivo appsettings.json o usa User Secrets de .NET para configurar la b
 Desde Visual studio presionar F5 para correr el proyecto o ubicarse en el boton verde arriba para ejecutar el proyecto. 
 Este abre en el navegador a esta URL: https://localhost:7059/swagger/index.html
 
-## Endpoints REST API 
+## 📡 Endpoints REST API <a name="endpoints"></a>
 
 | Método   | Endpoint                         | Descripción                                               |
 |----------|----------------------------------|-----------------------------------------------------------|
@@ -219,7 +177,7 @@ Este abre en el navegador a esta URL: https://localhost:7059/swagger/index.html
 
 
 
-## Pruebas unitarias 
+## ✅ Pruebas Unitarias <a name="pruebas"></a>
 En visual studio ubicarse en la parte superior izquierda y darle al menu despleglable View y luego a test explorer.
 Ya en ese apartado puede ejecutar uno o ambos unit test
 
