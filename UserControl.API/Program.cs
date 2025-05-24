@@ -17,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "UserContact.Api", Version = "v1", Description = "Api que maneja usuarios de prueba" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Vehiculos.Api", Version = "v1", Description = "Api que maneja vehiculos de prueba" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
